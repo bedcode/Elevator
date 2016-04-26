@@ -132,6 +132,17 @@ public class Elevator extends Subject implements Runnable {
          * See also the similar "enter" method.
          *
          *=================================================================*/
+        while (!terminated && (!open || f != position || (f.stopRequested() == false))) {
+            f.requestStop();
+            try {
+                wait();
+            } catch (InterruptedException ex) {
+                System.err.println(ex);
+            }
+        }
+        passengers.remove(p);
+        p.setLocation(f);
+        notifyObservers();
     }
     
     /**
