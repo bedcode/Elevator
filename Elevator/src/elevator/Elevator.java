@@ -206,6 +206,20 @@ public class Elevator extends Subject implements Runnable {
          * See also the similar "closeDoors" method.
          *
          *=================================================================*/
+        synchronized(this) {
+            open = true;
+            notifyObservers();
+            notifyAll();
+            position.cancelRequest();
+            position.cancelCall(Direction.UP);
+            position.cancelCall(Direction.DOWN);
+        }
+
+        try {
+            Thread.sleep(DOORS_TIME);
+        } catch (InterruptedException ex) {
+            System.err.println(ex);
+        }
     }
     
     /**
